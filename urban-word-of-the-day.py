@@ -4,10 +4,13 @@ import json
 import urllib2
 
 from flask import Flask
+from flask.ext.cache import Cache
 
 from bs4 import BeautifulSoup
 
 APP = Flask(__name__)
+CACHE = Cache(APP, config={'CACHE_TYPE': 'simple'})
+CACHE_TIMEOUT = 1800 # 30 minutes
 URL = 'http://www.urbandictionary.com'
 
 def get_wod(day=0):
@@ -34,11 +37,13 @@ def jsonize_wod(wod):
 
 @APP.route('/')
 @APP.route('/today')
+@CACHE.cached(timeout=CACHE_TIMEOUT)
 def today():
     return jsonize_wod(get_wod(0))
 
 
 @APP.route('/yesterday')
+@CACHE.cached(timeout=CACHE_TIMEOUT)
 def yesterday():
     return jsonize_wod(get_wod(1))
 
