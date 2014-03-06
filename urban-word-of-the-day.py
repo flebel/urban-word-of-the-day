@@ -26,7 +26,7 @@ def get_wod(day=0):
         words.append(div.text.strip())
 
     for div in soup.findAll('div', attrs={'class': 'meaning'}):
-        meanings.append(div.text.strip())
+        meanings.append('\n'.join(div.findAll(text=True)).strip())
 
     return zip(words, meanings)[day]
 
