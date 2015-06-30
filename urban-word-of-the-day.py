@@ -22,7 +22,7 @@ def get_wod(day=0):
     words = []
     meanings = []
 
-    for div in soup.findAll('div', attrs={'class': 'word'}):
+    for div in soup.findAll('a', attrs={'class': 'word'}):
         words.append(div.text.strip())
 
     for div in soup.findAll('div', attrs={'class': 'meaning'}):
