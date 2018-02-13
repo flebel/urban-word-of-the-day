@@ -3,4 +3,5 @@ beautifulsoup4==4.3.2
 flask==0.10.1
 gunicorn==18.0
 newrelic==2.40.0.34
+requests[security]==2.18.4
 

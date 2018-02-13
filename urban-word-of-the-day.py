@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import json
-import urllib2
+import requests
 
 from flask import Flask
 from flask.ext.cache import Cache
@@ -11,13 +11,13 @@ from bs4 import BeautifulSoup
 APP = Flask(__name__)
 CACHE = Cache(APP, config={'CACHE_TYPE': 'simple'})
 CACHE_TIMEOUT = 1800 # 30 minutes
-URL = 'http://www.urbandictionary.com'
+URL = 'https://www.urbandictionary.com'
 
 def get_wod(day=0):
     if day > 6:
         raise LookupError('Words of the day older than one week from today are not available.')
 
-    content = urllib2.urlopen(URL).read()
+    content = requests.get(URL).text
     soup = BeautifulSoup(content)
     words = []
     meanings = []
