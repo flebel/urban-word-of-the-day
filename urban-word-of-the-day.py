@@ -20,19 +20,27 @@ def get_wod(day=0):
     content = requests.get(URL).text
     soup = BeautifulSoup(content)
     words = []
-    meanings = []
 
     for div in soup.findAll('a', attrs={'class': 'word'}):
         words.append(div.text.strip())
 
-    for div in soup.findAll('div', attrs={'class': 'meaning'}):
-        meanings.append('\n'.join(div.findAll(text=True)).strip())
+    meanings = __get_elements_of_class('meaning', soup)
+    elements = __get_elements_of_class('example', soup)
 
-    return zip(words, meanings)[day]
+    return zip(words, meanings, elements)[day]
+
+
+def __get_elements_of_class(class_name, soup):
+    elements = []
+
+    for div in soup.findAll('div', attrs={'class': class_name}):
+        elements.append('\n'.join(div.findAll(text=True)).strip())
+
+    return elements
 
 
 def jsonize_wod(wod):
-    return json.dumps({ 'word': wod[0], 'meaning': wod[1] })
+    return json.dumps({ 'word': wod[0], 'meaning': wod[1], 'example': wod[2] })
 
 
 @APP.route('/')
